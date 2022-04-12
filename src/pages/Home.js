@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, ConnectButton, Icon, Tab, TabList } from 'web3uikit';
+import { Button, ConnectButton, Icon, Tab, TabList, Modal } from 'web3uikit';
 
 import './Home.css';
 import { Logo } from '../images/Netflix';
@@ -29,15 +29,7 @@ const Home = () => {
               <p className='sceneDesc'>{movies[0].Description}</p>
               <div className='playButton'>
                 <Button icon='chevronRightX2' text='Play' theme='secondary' type='button' />
-                <Button
-                  icon='plus'
-                  text='Add to My List'
-                  theme='translucent'
-                  type='button'
-                  onClick={() => {
-                    // console.log(myMovies);
-                  }}
-                />
+                <Button icon='plus' text='Add to My List' theme='translucent' type='button' />
               </div>
             </div>
 
@@ -62,6 +54,45 @@ const Home = () => {
           <Tab tabKey={2} tabName={'Series'} isDisabled={true}></Tab>
           <Tab tabKey={3} tabName={'MyList'}></Tab>
         </TabList>
+
+        {selectedFilm && (
+          <div className='modal'>
+            <Modal
+              onCloseButtonPressed={() => setVisible(false)}
+              isVisible={visible}
+              hasFooter={false}
+              width='1000px'
+            >
+              <div className='modalContent'>
+                <img src={selectedFilm.Scene} className='modalImg' alt=''></img>
+                <img className='modalLogo' src={selectedFilm.Logo} alt=''></img>
+
+                <div className='modalPlayButton'>
+                  <Button icon='chevronRightX2' text='Play' theme='secondary' type='button' />
+                  <Button icon='plus' text='Add to My List' theme='translucent' type='button' />
+                </div>
+
+                <div className='movieInfo'>
+                  <div className='description'>
+                    <div className='details'>
+                      <span>{selectedFilm.Year}</span>
+                      <span>{selectedFilm.Duration}</span>
+                    </div>
+                    {selectedFilm.Description}
+                  </div>
+
+                  <div className='detailedInfo'>
+                    Genre:
+                    <span className='deets'>{selectedFilm.Genre}</span>
+                    <br />
+                    Actors:
+                    <span className='deets'>{selectedFilm.Actors}</span>
+                  </div>
+                </div>
+              </div>
+            </Modal>
+          </div>
+        )}
       </div>
     </>
   );
