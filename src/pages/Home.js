@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, ConnectButton, Icon, Tab, TabList, Modal } from 'web3uikit';
+import { Button, ConnectButton, Icon, Tab, TabList, Modal, useNotification } from 'web3uikit';
 import { useMoralis } from 'react-moralis';
 
 import './Home.css';
@@ -11,6 +11,16 @@ const Home = () => {
   const [visible, setVisible] = useState(false);
   const [selectedFilm, setSelectedFilm] = useState();
   const { isAuthenticated, connect } = useMoralis();
+  const dispatch = useNotification();
+
+  const handleNewNotification = () => {
+    dispatch({
+      type: 'error',
+      message: 'please connect to your wallet',
+      title: 'Not Authenticated',
+      position: 'topL',
+    });
+  };
 
   return (
     <>
@@ -77,10 +87,31 @@ const Home = () => {
                 <img className='modalLogo' src={selectedFilm.Logo} alt=''></img>
 
                 <div className='modalPlayButton'>
-                  <Link to='/player' state={selectedFilm.Movie}>
-                    <Button icon='chevronRightX2' text='Play' theme='secondary' type='button' />
-                  </Link>
-                  <Button icon='plus' text='Add to My List' theme='translucent' type='button' />
+                  {isAuthenticated ? (
+                    <>
+                      <Link to='/player' state={selectedFilm.Movie}>
+                        <Button icon='chevronRightX2' text='Play' theme='secondary' type='button' />
+                      </Link>
+                      <Button icon='plus' text='Add to My List' theme='translucent' type='button' />
+                    </>
+                  ) : (
+                    <>
+                      <Button
+                        icon='chevronRightX2'
+                        text='Play'
+                        theme='secondary'
+                        type='button'
+                        onClick={handleNewNotification}
+                      />
+                      <Button
+                        icon='plus'
+                        text='Add to My List'
+                        theme='translucent'
+                        type='button'
+                        onClick={handleNewNotification}
+                      />
+                    </>
+                  )}
                 </div>
 
                 <div className='movieInfo'>
