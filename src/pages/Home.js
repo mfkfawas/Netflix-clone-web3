@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, ConnectButton, Icon, Tab, TabList, Modal } from 'web3uikit';
+import { useMoralis } from 'react-moralis';
 
 import './Home.css';
 import { Logo } from '../images/Netflix';
@@ -9,6 +10,8 @@ import { movies } from '../helpers/library';
 const Home = () => {
   const [visible, setVisible] = useState(false);
   const [selectedFilm, setSelectedFilm] = useState();
+  const { isAuthenticated, connect } = useMoralis();
+
   return (
     <>
       <div className='logo'>
@@ -29,7 +32,13 @@ const Home = () => {
               <p className='sceneDesc'>{movies[0].Description}</p>
               <div className='playButton'>
                 <Button icon='chevronRightX2' text='Play' theme='secondary' type='button' />
-                <Button icon='plus' text='Add to My List' theme='translucent' type='button' />
+                <Button
+                  icon='plus'
+                  text='Add to My List'
+                  theme='translucent'
+                  type='button'
+                  onClick={() => console.log(isAuthenticated)}
+                />
               </div>
             </div>
 
