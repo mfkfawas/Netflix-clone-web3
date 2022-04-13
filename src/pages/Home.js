@@ -22,7 +22,7 @@ const Home = () => {
       });
 
       try {
-        const theList = await Moralis.Cloud.run('getMyList', { addrs: account });
+        const theList = await Moralis.Cloud.run('getMyList', { addr: account });
 
         const filterdA = movies.filter(function (e) {
           return theList.indexOf(e.Name) > -1;
@@ -95,7 +95,33 @@ const Home = () => {
             </div>
           </Tab>
           <Tab tabKey={2} tabName={'Series'} isDisabled={true}></Tab>
-          <Tab tabKey={3} tabName={'MyList'}></Tab>
+
+          <Tab tabKey={3} tabName={'MyList'}>
+            <div className='ownListContent'>
+              <div className='title'>Your Library</div>
+              {myMovies && isAuthenticated ? (
+                <>
+                  <div className='ownThumbs'>
+                    {myMovies.map(e => {
+                      return (
+                        <img
+                          src={e.Thumnbnail}
+                          className='thumbnail'
+                          alt='movies'
+                          onClick={() => {
+                            setSelectedFilm(e);
+                            setVisible(true);
+                          }}
+                        ></img>
+                      );
+                    })}
+                  </div>
+                </>
+              ) : (
+                <div className='ownThumbs'>You need to Authenicate TO View Your Own list</div>
+              )}
+            </div>
+          </Tab>
         </TabList>
 
         {selectedFilm && (
