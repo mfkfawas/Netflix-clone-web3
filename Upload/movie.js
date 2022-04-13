@@ -1,7 +1,7 @@
-let fs = require("fs");
-let axios = require("axios");
+let fs = require('fs');
+let axios = require('axios');
 
-let media = ["secretVideo.mp4"];
+let media = ['secretVideo.mp4'];
 let ipfsArray = [];
 let promises = [];
 
@@ -12,7 +12,7 @@ for (let i = 0; i < media.length; i++) {
         if (err) rej();
         ipfsArray.push({
           path: `media/${i}`,
-          content: data.toString("base64"),
+          content: data.toString('base64'),
         });
         res();
       });
@@ -21,23 +21,20 @@ for (let i = 0; i < media.length; i++) {
 }
 
 Promise.all(promises).then(() => {
-  axios.post(
-    "https://deep-index.moralis.io/api/v2/ipfs/uploadFolder",
-    ipfsArray,
-    {
+  axios
+    .post('https://deep-index.moralis.io/api/v2/ipfs/uploadFolder', ipfsArray, {
       headers: {
-        "X-API-KEY":
-          "<Your API KEY>",
-        "Content-Type": "application/json",
-        accept: "application/json",
+        'X-API-KEY': 'JwhqKRSUUlO3EqBfb4THe9nWM5UHBArktTB52hpIeIgEav1SJkgHcchNwVKGYmN8',
+        'Content-Type': 'application/json',
+        accept: 'application/json',
       },
       maxContentLength: Infinity,
       maxBodyLength: Infinity,
-    }
-  ).then((res) => {
-    console.log(res.data);
-  })
-  .catch((error) => {
-    console.log(error);
-  });
+    })
+    .then(res => {
+      console.log(res.data);
+    })
+    .catch(error => {
+      console.log(error);
+    });
 });
