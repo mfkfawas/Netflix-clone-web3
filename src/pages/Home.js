@@ -68,7 +68,9 @@ const Home = () => {
                 <img className='modalLogo' src={selectedFilm.Logo} alt=''></img>
 
                 <div className='modalPlayButton'>
-                  <Button icon='chevronRightX2' text='Play' theme='secondary' type='button' />
+                  <Link to='/player' state={selectedFilm.Movie}>
+                    <Button icon='chevronRightX2' text='Play' theme='secondary' type='button' />
+                  </Link>
                   <Button icon='plus' text='Add to My List' theme='translucent' type='button' />
                 </div>
 
