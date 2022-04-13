@@ -46,6 +46,15 @@ const Home = () => {
     });
   };
 
+  const handleAddNotification = () => {
+    dispatch({
+      type: 'success',
+      message: 'Movie added to your list',
+      title: 'Success',
+      position: 'topL',
+    });
+  };
+
   return (
     <>
       <div className='logo'>
@@ -142,7 +151,19 @@ const Home = () => {
                       <Link to='/player' state={selectedFilm.Movie}>
                         <Button icon='chevronRightX2' text='Play' theme='secondary' type='button' />
                       </Link>
-                      <Button icon='plus' text='Add to My List' theme='translucent' type='button' />
+                      <Button
+                        icon='plus'
+                        text='Add to My List'
+                        theme='translucent'
+                        type='button'
+                        onClick={async () => {
+                          await Moralis.Cloud.run('updateMyList', {
+                            addr: account,
+                            newFav: selectedFilm.Name,
+                          });
+                          handleAddNotification();
+                        }}
+                      />
                     </>
                   ) : (
                     <>
