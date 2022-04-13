@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, ConnectButton, Icon, Tab, TabList, Modal, useNotification } from 'web3uikit';
 import { useMoralis } from 'react-moralis';
@@ -10,8 +10,32 @@ import { movies } from '../helpers/library';
 const Home = () => {
   const [visible, setVisible] = useState(false);
   const [selectedFilm, setSelectedFilm] = useState();
-  const { isAuthenticated, connect } = useMoralis();
+  const [myMovies, setMyMovies] = useState();
+  const { isAuthenticated, Moralis, account } = useMoralis();
   const dispatch = useNotification();
+
+  useEffect(() => {
+    async function fetchMyList() {
+      await Moralis.start({
+        serverUrl: process.env.REACT_APP_MORALIS_SERVER_URL,
+        appId: process.env.REACT_APP_MORALIS_APP_ID,
+      });
+
+      try {
+        const theList = await Moralis.Cloud.run('getMyList', { addrs: account });
+
+        const filterdA = movies.filter(function (e) {
+          return theList.indexOf(e.Name) > -1;
+        });
+
+        setMyMovies(filterdA);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    fetchMyList();
+  }, [account]);
 
   const handleNewNotification = () => {
     dispatch({
@@ -47,7 +71,7 @@ const Home = () => {
                   text='Add to My List'
                   theme='translucent'
                   type='button'
-                  onClick={() => console.log(isAuthenticated)}
+                  onClick={() => console.log(myMovies)}
                 />
               </div>
             </div>
